@@ -1,0 +1,54 @@
+name: Bug report
+description: Something does not work with the layout or the firmware
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before reporting, check your board revision as described in the README (section "Identify your board").
+        Antes de reportar, comprobá la revisión de tu placa como explica el README (sección "Cómo identificar tu placa").
+  - type: dropdown
+    id: board
+    attributes:
+      label: Board revision
+      options:
+        - Corne v4.1 standard (REV_0410 / 4.10)
+        - Corne v4.0 standard (REV_0400 / 4.00)
+        - Other / I am not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: dropdown
+    id: part
+    attributes:
+      label: What fails?
+      options:
+        - Loading the .vil layout in Vial
+        - Building the firmware
+        - Flashing the firmware
+        - Layer colors
+        - A key does something unexpected
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: release
+    attributes:
+      label: Firmware version or commit
+      placeholder: v1.0.0
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened and what did you expect?
+      description: Steps to reproduce, error messages, photos of the keyboard if it is about colors.
+    validations:
+      required: true

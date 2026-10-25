@@ -1,5 +1,7 @@
 # Corne v4 para macOS
 
+[![Build firmware](https://github.com/kats76/corne-mac/actions/workflows/build.yml/badge.svg)](https://github.com/kats76/corne-mac/actions/workflows/build.yml)
+
 [Read in English](README.md)
 
 Layout de Vial pensado para macOS y firmware con **color por capa** para el **Corne v4.1 standard** de foostan (46 teclas, RP2040).
@@ -7,14 +9,14 @@ Layout de Vial pensado para macOS y firmware con **color por capa** para el **Co
 - `layouts/corne-mac.vil`: layout para Mac. Se carga en Vial con **File > Load saved layout**.
 - `layouts/corne-windows.vil`: layout original de Windows, como backup.
 - `keymap/mac_layers/`: firmware Vial oficial de foostan más el indicador de capa.
-- Firmware compilado: descargá `corne-mac-layers.uf2` desde [Releases](../../releases).
+- Firmware compilado: descargá `corne-v4.1-mac-layers.uf2` desde [Releases](../../releases/latest).
 
 ## ¿Para qué placa es?
 
 | Placa | Layout (`.vil`) | Firmware (`.uf2`) |
 | --- | --- | --- |
 | Corne v4.1 standard (46 teclas, RP2040) | Probado | Probado |
-| Corne v4.0 standard (46 teclas, RP2040) | Debería funcionar, sin probar | Compilalo vos con `KEYBOARD=crkbd/rev4_0/standard`, sin probar |
+| Corne v4.0 standard (46 teclas, RP2040) | Debería funcionar, sin probar | `corne-v4.0-mac-layers.uf2` en Releases, sin probar |
 | Corne v4 mini (42 teclas) | No: tiene otra cantidad de teclas | No |
 | Corne v3 y anteriores (Pro Micro, AVR) | No | No: otro microcontrolador |
 

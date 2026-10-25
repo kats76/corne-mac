@@ -1,5 +1,7 @@
 # Corne v4 for macOS
 
+[![Build firmware](https://github.com/kats76/corne-mac/actions/workflows/build.yml/badge.svg)](https://github.com/kats76/corne-mac/actions/workflows/build.yml)
+
 [Leer en español](README.es.md)
 
 A Vial layout designed for macOS plus a firmware with a **per-layer RGB indicator** for the foostan **Corne v4.1 standard** (46 keys, RP2040).
@@ -7,14 +9,14 @@ A Vial layout designed for macOS plus a firmware with a **per-layer RGB indicato
 - `layouts/corne-mac.vil`: the Mac layout. Load it in Vial with **File > Load saved layout**.
 - `layouts/corne-windows.vil`: the original Windows layout, kept as a backup.
 - `keymap/mac_layers/`: foostan's official Vial firmware plus the layer color indicator.
-- Prebuilt firmware: download `corne-mac-layers.uf2` from [Releases](../../releases).
+- Prebuilt firmware: download `corne-v4.1-mac-layers.uf2` from [Releases](../../releases/latest).
 
 ## Which board is this for?
 
 | Board | Layout (`.vil`) | Firmware (`.uf2`) |
 | --- | --- | --- |
 | Corne v4.1 standard (46 keys, RP2040) | Tested | Tested |
-| Corne v4.0 standard (46 keys, RP2040) | Should work, untested | Build it yourself with `KEYBOARD=crkbd/rev4_0/standard`, untested |
+| Corne v4.0 standard (46 keys, RP2040) | Should work, untested | `corne-v4.0-mac-layers.uf2` in Releases, untested |
 | Corne v4 mini (42 keys) | No: different number of keys | No |
 | Corne v3 and older (Pro Micro, AVR) | No | No: different microcontroller |
 
