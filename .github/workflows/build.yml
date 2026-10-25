@@ -1,0 +1,41 @@
+name: Build firmware
+
+on:
+  push:
+    branches: [dev, main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/qmk/qmk_cli:latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch vial-qmk
+        run: ./scripts/fetch-vial-qmk.sh vial-qmk
+
+      - name: Add keymap
+        run: cp -r keymap/mac_layers vial-qmk/keyboards/crkbd/keymaps/mac_layers
+
+      - name: Build
+        working-directory: vial-qmk
+        run: make crkbd/rev4_1/standard:mac_layers
+
+      - name: Collect firmware
+        run: cp vial-qmk/crkbd_rev4_1_standard_mac_layers.uf2 corne-mac-layers.uf2
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: corne-mac-layers
+          path: corne-mac-layers.uf2
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: corne-mac-layers.uf2
