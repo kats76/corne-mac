@@ -55,6 +55,8 @@ Modifiers and layers live on the thumbs: one hand holds the layer, the other one
 
 The whole keyboard changes color with the active layer, so you always know where you are:
 
+![Both halves switching layer colors](docs/img/layer-colors.gif)
+
 | Layer | Color |
 | --- | --- |
 | 0 Base | Dim white |

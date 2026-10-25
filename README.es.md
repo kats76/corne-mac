@@ -55,6 +55,8 @@ Modificadores y capas en los pulgares: una mano sostiene la capa y la otra escri
 
 Todo el teclado cambia de color según la capa activa, así sabés siempre dónde estás:
 
+![Las dos mitades cambiando de color según la capa](docs/img/layer-colors.gif)
+
 | Capa | Color |
 | --- | --- |
 | 0 Base | Blanco tenue |
