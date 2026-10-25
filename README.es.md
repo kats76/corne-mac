@@ -9,7 +9,7 @@ Layout de Vial pensado para macOS y firmware con **color por capa** para el **Co
 - `layouts/corne-mac.vil`: layout para Mac. Se carga en Vial con **File > Load saved layout**.
 - `layouts/corne-windows.vil`: layout original de Windows, como backup.
 - `keymap/mac_layers/`: firmware Vial oficial de foostan más el indicador de capa.
-- Firmware compilado: descargá `corne-v4.1-mac-layers.uf2` desde [Releases](../../releases/latest).
+- Firmware compilado: descarga `corne-v4.1-mac-layers.uf2` desde [Releases](../../releases/latest).
 
 ## ¿Para qué placa es?
 
@@ -27,12 +27,12 @@ El layout solo depende de Vial, así que lo puede cargar cualquier placa con el 
 La v4.0 y la v4.1 comparten el mismo ID de producto USB (`0x4653:0x0004`). Las distingue la versión del dispositivo: **4.10 es v4.1 y 4.00 es v4.0**.
 
 - **macOS:** `ioreg -r -c IOHIDDevice -l | grep -A40 '"Product" = "Corne v4"' | grep VersionNumber` muestra `1040` (0x0410) en una v4.1.
-- **Windows:** Administrador de dispositivos, el dispositivo Corne v4, Propiedades, Detalles, Id. de hardware. Buscá `REV_0410` (v4.1) o `REV_0400` (v4.0).
+- **Windows:** Administrador de dispositivos, el dispositivo Corne v4, Propiedades, Detalles, Id. de hardware. Busca `REV_0410` (v4.1) o `REV_0400` (v4.0).
 - **Linux:** `lsusb -v -d 4653:0004 | grep bcdDevice` muestra `4.10` en una v4.1.
 
 ## El layout para Mac
 
-Modificadores y capas en los pulgares: una mano sostiene la capa y la otra escribe. Cmd ocupa el pulgar que en Windows es Ctrl, así Cmd+C/V se aprieta con el mismo dedo que ya tenés memorizado.
+Modificadores y capas en los pulgares: una mano sostiene la capa y la otra escribe. Cmd ocupa el pulgar que en Windows es Ctrl, así Cmd+C/V se presiona con el mismo dedo que ya tienes memorizado.
 
 ![Capas para Mac](docs/img/layers-mac.svg)
 
@@ -53,7 +53,7 @@ Modificadores y capas en los pulgares: una mano sostiene la capa y la otra escri
 
 ## Color por capa
 
-Todo el teclado cambia de color según la capa activa, así sabés siempre dónde estás:
+Todo el teclado cambia de color según la capa activa, así siempre sabes dónde estás:
 
 ![Las dos mitades cambiando de color según la capa](docs/img/layer-colors.gif)
 
@@ -68,7 +68,7 @@ El firmware conserva el UID de Vial de foostan, así que los `.vil` siguen carga
 
 ## Compilar
 
-Solo necesitás Docker. El toolchain de QMK nunca se instala en tu sistema: todo corre en la imagen oficial `ghcr.io/qmk/qmk_cli`, sin red. vial-qmk está fijado a un commit concreto, así todos compilan el mismo código fuente. El `.uf2` resultante no es idéntico byte a byte entre máquinas (la compilación incluye datos del entorno), pero funciona igual.
+Solo necesitas Docker. El toolchain de QMK nunca se instala en tu sistema: todo corre en la imagen oficial `ghcr.io/qmk/qmk_cli`, sin red. vial-qmk está fijado a un commit concreto, así todos compilan el mismo código fuente. El `.uf2` resultante no es idéntico byte a byte entre máquinas (la compilación incluye datos del entorno), pero funciona igual.
 
 ```bash
 ./scripts/build.sh
@@ -76,36 +76,36 @@ Solo necesitás Docker. El toolchain de QMK nunca se instala en tu sistema: todo
 
 El firmware queda en `dist/crkbd_rev4_1_standard_mac_layers.uf2`. Si al final aparece `cannot create regular file '/qmk_userspace/...'`, no pasa nada: la imagen intenta copiar el archivo a una carpeta que este proyecto no usa. El CI lo compila en cada push y lo adjunta a la release de cada tag `v*`. Para otra revisión: `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
-En Windows, ejecutá los scripts desde WSL o Git Bash, con Docker Desktop.
+En Windows, ejecuta los scripts desde WSL o Git Bash, con Docker Desktop.
 
 ## Antes de flashear
 
-- **Primero comprobá la revisión de tu placa** (ver arriba). La v4.0 y la v4.1 conectan las mitades de forma distinta, así que con el firmware equivocado las mitades pueden dejar de comunicarse.
-- **Hacé un backup de tu layout actual:** en Vial, **File > Save current layout**. Flashear con bootmagic lo borra.
-- **Tené a mano el firmware de fábrica** por si querés volver atrás: foostan lo publica en [foostan/kbd_firmware](https://github.com/foostan/kbd_firmware).
-- El bootloader del RP2040 está en ROM, así que el microcontrolador no se puede brickear. Pero si un firmware equivocado hace que las teclas dejen de responder, el bootmagic tampoco funciona y necesitás el acceso de arranque por hardware de la placa para recuperarla. Consultá la guía de armado de foostan para tu revisión.
+- **Primero comprueba la revisión de tu placa** (ver arriba). La v4.0 y la v4.1 conectan las mitades de forma distinta, así que con el firmware equivocado las mitades pueden dejar de comunicarse.
+- **Haz un backup de tu layout actual:** en Vial, **File > Save current layout**. Flashear con bootmagic lo borra.
+- **Ten a mano el firmware de fábrica** por si quieres volver atrás: foostan lo publica en [foostan/kbd_firmware](https://github.com/foostan/kbd_firmware).
+- El bootloader del RP2040 está en ROM, así que el microcontrolador no se puede brickear. Pero si un firmware equivocado hace que las teclas dejen de responder, el bootmagic tampoco funciona y necesitas el acceso de arranque por hardware de la placa para recuperarla. Consulta la guía de montaje de foostan para tu revisión.
 
 ## Flashear
 
 El Corne v4.1 no tiene botón de reset. Se usa bootmagic, que además borra la memoria del teclado.
 
-1. Desenchufá el USB y después el cable jack (TRRS) entre las mitades.
-2. Mitad izquierda: mantené **Q** y enchufá el USB. Aparece el disco `RPI-RP2`; copiá ahí el `.uf2`.
-3. Desenchufá el USB. Mitad derecha: mantené **P** y enchufá el USB. Copiá el mismo `.uf2`.
-4. Con el USB desenchufado, reconectá el cable jack. Enchufá el USB en la mitad izquierda.
-5. En Vial: **File > Load saved layout** y elegí `layouts/corne-mac.vil`.
+1. Desconecta el USB y después el cable jack (TRRS) entre las mitades.
+2. Mitad izquierda: mantén presionada la **Q** y conecta el USB. Aparece el disco `RPI-RP2`; copia ahí el `.uf2`.
+3. Desconecta el USB. Mitad derecha: mantén presionada la **P** y conecta el USB. Copia el mismo `.uf2`.
+4. Con el USB desconectado, vuelve a conectar el cable jack. Conecta el USB en la mitad izquierda.
+5. En Vial: **File > Load saved layout** y elige `layouts/corne-mac.vil`.
 
-**Nunca conectes ni desconectes el cable jack con el USB enchufado:** puede dañar el microcontrolador.
+**Nunca conectes ni desconectes el cable jack con el USB conectado:** puede dañar el microcontrolador.
 
-## Armá tu propio layout
+## Arma tu propio layout
 
-1. Hacé un fork de este repo y cargá `layouts/corne-mac.vil` en Vial.
-2. Cambiá lo que quieras; Vial lo escribe en el teclado en tiempo real.
-3. Exportalo con **File > Save current layout** sobre `layouts/corne-mac.vil`.
-4. Ejecutá `./scripts/draw.sh` para regenerar las imágenes de las capas.
-5. Abrí un pull request si lo querés compartir.
+1. Haz un fork de este repo y carga `layouts/corne-mac.vil` en Vial.
+2. Cambia lo que quieras; Vial lo escribe en el teclado en tiempo real.
+3. Expórtalo con **File > Save current layout** sobre `layouts/corne-mac.vil`.
+4. Ejecuta `./scripts/draw.sh` para regenerar las imágenes de las capas.
+5. Abre un pull request si lo quieres compartir.
 
-Para cambiar los colores de las capas, editá `rgb_matrix_indicators_advanced_user` en `keymap/mac_layers/keymap.c` y volvé a compilar.
+Para cambiar los colores de las capas, edita `rgb_matrix_indicators_advanced_user` en `keymap/mac_layers/keymap.c` y vuelve a compilar.
 
 ## Glosario
 
