@@ -9,6 +9,25 @@ Layout de Vial pensado para macOS y firmware con **color por capa** para el **Co
 - `keymap/mac_layers/`: firmware Vial oficial de foostan más el indicador de capa.
 - Firmware compilado: descargá `corne-mac-layers.uf2` desde [Releases](../../releases).
 
+## ¿Para qué placa es?
+
+| Placa | Layout (`.vil`) | Firmware (`.uf2`) |
+| --- | --- | --- |
+| Corne v4.1 standard (46 teclas, RP2040) | Probado | Probado |
+| Corne v4.0 standard (46 teclas, RP2040) | Debería funcionar, sin probar | Compilalo vos con `KEYBOARD=crkbd/rev4_0/standard`, sin probar |
+| Corne v4 mini (42 teclas) | No: tiene otra cantidad de teclas | No |
+| Corne v3 y anteriores (Pro Micro, AVR) | No | No: otro microcontrolador |
+
+El layout solo depende de Vial, así que lo puede cargar cualquier placa con el firmware Vial de foostan y el layout de 46 teclas `LAYOUT_split_3x6_3_ex2`. El firmware, en cambio, se compila para una revisión exacta de la placa.
+
+### Cómo identificar tu placa
+
+La v4.0 y la v4.1 comparten el mismo ID de producto USB (`0x4653:0x0004`). Las distingue la versión del dispositivo: **4.10 es v4.1 y 4.00 es v4.0**.
+
+- **macOS:** `ioreg -r -c IOHIDDevice -l | grep -A40 '"Product" = "Corne v4"' | grep VersionNumber` muestra `1040` (0x0410) en una v4.1.
+- **Windows:** Administrador de dispositivos, el dispositivo Corne v4, Propiedades, Detalles, Id. de hardware. Buscá `REV_0410` (v4.1) o `REV_0400` (v4.0).
+- **Linux:** `lsusb -v -d 4653:0004 | grep bcdDevice` muestra `4.10` en una v4.1.
+
 ## El layout para Mac
 
 Modificadores y capas en los pulgares: una mano sostiene la capa y la otra escribe. Cmd ocupa el pulgar que en Windows es Ctrl, así Cmd+C/V se aprieta con el mismo dedo que ya tenés memorizado.
@@ -51,9 +70,16 @@ Solo necesitás Docker. El toolchain de QMK nunca se instala en tu sistema: todo
 ./scripts/build.sh
 ```
 
-El firmware queda en `dist/corne-mac-layers.uf2`. El CI lo compila en cada push y lo adjunta a la release de cada tag `v*`.
+El firmware queda en `dist/crkbd_rev4_1_standard_mac_layers.uf2`. El CI lo compila en cada push y lo adjunta a la release de cada tag `v*`. Para otra revisión: `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
 En Windows, ejecutá los scripts desde WSL o Git Bash, con Docker Desktop.
+
+## Antes de flashear
+
+- **Primero comprobá la revisión de tu placa** (ver arriba). La v4.0 y la v4.1 conectan las mitades de forma distinta, así que con el firmware equivocado las mitades pueden dejar de comunicarse.
+- **Hacé un backup de tu layout actual:** en Vial, **File > Save current layout**. Flashear con bootmagic lo borra.
+- **Tené a mano el firmware de fábrica** por si querés volver atrás: foostan lo publica en [foostan/kbd_firmware](https://github.com/foostan/kbd_firmware).
+- El bootloader del RP2040 está en ROM, así que el microcontrolador no se puede brickear. Pero si un firmware equivocado hace que las teclas dejen de responder, el bootmagic tampoco funciona y necesitás el acceso de arranque por hardware de la placa para recuperarla. Consultá la guía de armado de foostan para tu revisión.
 
 ## Flashear
 

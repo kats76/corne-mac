@@ -9,6 +9,25 @@ A Vial layout designed for macOS plus a firmware with a **per-layer RGB indicato
 - `keymap/mac_layers/`: foostan's official Vial firmware plus the layer color indicator.
 - Prebuilt firmware: download `corne-mac-layers.uf2` from [Releases](../../releases).
 
+## Which board is this for?
+
+| Board | Layout (`.vil`) | Firmware (`.uf2`) |
+| --- | --- | --- |
+| Corne v4.1 standard (46 keys, RP2040) | Tested | Tested |
+| Corne v4.0 standard (46 keys, RP2040) | Should work, untested | Build it yourself with `KEYBOARD=crkbd/rev4_0/standard`, untested |
+| Corne v4 mini (42 keys) | No: different number of keys | No |
+| Corne v3 and older (Pro Micro, AVR) | No | No: different microcontroller |
+
+The layout only depends on Vial, so any board running foostan's Vial firmware with the 46-key `LAYOUT_split_3x6_3_ex2` can load it. The firmware is built for one exact board revision.
+
+### Identify your board
+
+v4.0 and v4.1 share the same USB product ID (`0x4653:0x0004`). The device version tells them apart: **4.10 is v4.1, 4.00 is v4.0**.
+
+- **macOS:** `ioreg -r -c IOHIDDevice -l | grep -A40 '"Product" = "Corne v4"' | grep VersionNumber` prints `1040` (0x0410) on a v4.1.
+- **Windows:** Device Manager, the Corne v4 device, Properties, Details, Hardware Ids. Look for `REV_0410` (v4.1) or `REV_0400` (v4.0).
+- **Linux:** `lsusb -v -d 4653:0004 | grep bcdDevice` prints `4.10` on a v4.1.
+
 ## The Mac layout
 
 Modifiers and layers live on the thumbs: one hand holds the layer, the other one types. Cmd sits on the thumb that is Ctrl on Windows, so Cmd+C/V uses the same finger your muscle memory expects.
@@ -51,9 +70,16 @@ You only need Docker. The QMK toolchain is never installed on your system: every
 ./scripts/build.sh
 ```
 
-The firmware ends up in `dist/corne-mac-layers.uf2`. CI builds it on every push and attaches it to each `v*` tag release.
+The firmware ends up in `dist/crkbd_rev4_1_standard_mac_layers.uf2`. CI builds it on every push and attaches it to each `v*` tag release. For another revision, run `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
 On Windows, run the scripts from WSL or Git Bash with Docker Desktop.
+
+## Before you flash
+
+- **Check your board revision first** (see above). v4.0 and v4.1 wire the link between halves differently, so the wrong firmware can leave the halves unable to talk to each other.
+- **Back up your current layout:** in Vial, **File > Save current layout**. Flashing with bootmagic wipes it.
+- **Keep the stock firmware at hand** in case you want to go back: foostan publishes it in [foostan/kbd_firmware](https://github.com/foostan/kbd_firmware).
+- The RP2040 bootloader lives in ROM, so the controller cannot be bricked. But if a wrong firmware stops the keys from working, bootmagic stops working too, and you need the board's hardware boot access to recover. Check foostan's build guide for your revision.
 
 ## Flash
 
