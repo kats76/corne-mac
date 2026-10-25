@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Before reporting, check your board revision as described in the README (section "Identify your board").
-        Antes de reportar, comprobá la revisión de tu placa como explica el README (sección "Cómo identificar tu placa").
+        Antes de reportar, comprueba la revisión de tu placa como explica el README (sección "Cómo identificar tu placa").
   - type: dropdown
     id: board
     attributes:
