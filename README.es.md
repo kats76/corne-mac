@@ -66,13 +66,13 @@ El firmware conserva el UID de Vial de foostan, así que los `.vil` siguen carga
 
 ## Compilar
 
-Solo necesitás Docker. El toolchain de QMK nunca se instala en tu sistema: todo corre en la imagen oficial `ghcr.io/qmk/qmk_cli`, sin red. vial-qmk está fijado a un commit concreto, así cada compilación es reproducible.
+Solo necesitás Docker. El toolchain de QMK nunca se instala en tu sistema: todo corre en la imagen oficial `ghcr.io/qmk/qmk_cli`, sin red. vial-qmk está fijado a un commit concreto, así todos compilan el mismo código fuente. El `.uf2` resultante no es idéntico byte a byte entre máquinas (la compilación incluye datos del entorno), pero funciona igual.
 
 ```bash
 ./scripts/build.sh
 ```
 
-El firmware queda en `dist/crkbd_rev4_1_standard_mac_layers.uf2`. El CI lo compila en cada push y lo adjunta a la release de cada tag `v*`. Para otra revisión: `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
+El firmware queda en `dist/crkbd_rev4_1_standard_mac_layers.uf2`. Si al final aparece `cannot create regular file '/qmk_userspace/...'`, no pasa nada: la imagen intenta copiar el archivo a una carpeta que este proyecto no usa. El CI lo compila en cada push y lo adjunta a la release de cada tag `v*`. Para otra revisión: `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
 En Windows, ejecutá los scripts desde WSL o Git Bash, con Docker Desktop.
 
@@ -114,7 +114,7 @@ Para cambiar los colores de las capas, editá `rgb_matrix_indicators_advanced_us
 | tocar (una tecla) | tap |
 | flashear | flash |
 | mitad secundaria | secondary half |
-| compilación reproducible | reproducible build |
+| código fuente fijado | pinned source |
 
 ## Créditos y licencia
 

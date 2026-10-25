@@ -66,13 +66,13 @@ The firmware keeps foostan's Vial UID, so any `.vil` keeps loading. `SPLIT_LAYER
 
 ## Build
 
-You only need Docker. The QMK toolchain is never installed on your system: everything runs in the official `ghcr.io/qmk/qmk_cli` image with networking disabled. vial-qmk is pinned to a fixed commit, so every build is reproducible.
+You only need Docker. The QMK toolchain is never installed on your system: everything runs in the official `ghcr.io/qmk/qmk_cli` image with networking disabled. vial-qmk is pinned to a fixed commit, so everyone builds the same source. The resulting `.uf2` is not byte-for-byte identical across machines (the build embeds environment details), but it behaves the same.
 
 ```bash
 ./scripts/build.sh
 ```
 
-The firmware ends up in `dist/crkbd_rev4_1_standard_mac_layers.uf2`. CI builds it on every push and attaches it to each `v*` tag release. For another revision, run `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
+The firmware ends up in `dist/crkbd_rev4_1_standard_mac_layers.uf2`. A `cannot create regular file '/qmk_userspace/...'` message near the end is harmless: the image tries to copy the file to a folder that this project does not use. CI builds it on every push and attaches it to each `v*` tag release. For another revision, run `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
 On Windows, run the scripts from WSL or Git Bash with Docker Desktop.
 
