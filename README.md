@@ -59,10 +59,21 @@ The whole keyboard changes color with the active layer, so you always know where
 
 | Layer | Color |
 | --- | --- |
-| 0 Base | Dim white |
+| 0 Base | Dim white (the color set in Vial) |
 | 1 Num + Nav | Blue |
 | 2 Symbols | Green |
 | 3 Fn + Media | Red |
+| 4 (unused) | Yellow |
+| 5 (unused) | Purple |
+
+The color belongs to the layer **number**, not to what the layer contains. If your own layout puts symbols on layer 1, they light up blue.
+
+### Change the colors
+
+- **Base layer, no rebuild:** pick a color in Vial's **Lighting** tab, or use the hue and saturation keys of the Fn + Media layer. The base stays at a third of the brightness so the other layers stand out.
+- **Layers 1 to 5:** edit the `LAYER_n_COLOR` lines in `keymap/mac_layers/config.h`, rebuild and flash. The available color names are listed right above those lines.
+
+The brightness keys and the on/off key work on every layer. The effect (mode) keys have no visible effect, because the layer color is painted over the effect.
 
 The firmware keeps foostan's Vial UID, so any `.vil` keeps loading. `SPLIT_LAYER_STATE_ENABLE` sends the active layer to the secondary half so both halves light up the same.
 
@@ -105,7 +116,7 @@ The Corne v4.1 has no reset button. Use bootmagic instead, which also wipes the 
 4. Run `./scripts/draw.sh` to regenerate the layer images.
 5. Open a pull request if you want to share it.
 
-To change the layer colors, edit `rgb_matrix_indicators_advanced_user` in `keymap/mac_layers/keymap.c` and rebuild.
+To change the layer colors, see [Change the colors](#change-the-colors).
 
 ## Credits and license
 
