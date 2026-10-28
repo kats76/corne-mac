@@ -2,6 +2,7 @@
 # Convierte un .vil de Vial al YAML de keymap-drawer para generar las imagenes de las capas.
 # Uso: vil_to_drawer.py <archivo.vil> <salida.yaml> <nombre capa 0> [<nombre capa 1> ...]
 import json
+import os
 import sys
 
 # Orden fisico de LAYOUT_split_3x6_3_ex2: (fila de la matriz, columna)
@@ -48,7 +49,20 @@ def basic_label(name):
     return NAMES.get(name, name)
 
 
-def key_label(code, os_name):
+def layer_name(index, names):
+    if index < len(names) and names[index] != "-":
+        # Sin espacios alrededor del +: keymap-drawer corta con ... las leyendas de mas de tres lineas
+        return names[index].replace(" + ", "+")
+    return "L" + str(index)
+
+
+def layer_target(code):
+    if isinstance(code, str) and code.startswith("MO(") and code.endswith(")"):
+        return int(code[3:-1])
+    return None
+
+
+def key_label(code, os_name, names):
     if code == -1:
         return None
     if isinstance(code, int):
@@ -66,9 +80,12 @@ def key_label(code, os_name):
     if code.startswith("LSFT(") and code.endswith(")"):
         inner = basic_label(code[5:-1])
         return SHIFTED.get(inner, "Shift+" + inner)
-    for prefix, label in (("MO(", "Hold L"), ("TO(", "To L"), ("TT(", "TT L"), ("TD(", "TD ")):
+    # Se muestra el nombre de la capa porque "L2" no le dice nada a quien mira la imagen
+    for prefix, label in (("MO(", "Hold "), ("TO(", "To "), ("TT(", "TT ")):
         if code.startswith(prefix):
-            return label + code[len(prefix):-1]
+            return label + layer_name(int(code[len(prefix):-1]), names)
+    if code.startswith("TD("):
+        return "TD " + code[3:-1]
     if code in ("KC_LGUI", "KC_RGUI"):
         return "Cmd" if os_name == "mac" else "Win"
     if code == "KC_LALT" and os_name == "mac":
@@ -80,13 +97,25 @@ def key_label(code, os_name):
 
 def main():
     src, dst, names = sys.argv[1], sys.argv[2], sys.argv[3:]
-    os_name = "mac" if "mac" in dst else "windows"
+    # Solo el nombre del archivo: la carpeta del repo se llama corne-mac y confundia la deteccion
+    os_name = "mac" if "mac" in os.path.basename(dst) else "windows"
     layout = json.load(open(src))["layout"]
+    labels = [[key_label(layer[r][c], os_name, names) for r, c in LAYOUT_ORDER] for layer in layout]
+    # La tecla que se mantiene para llegar a una capa es transparente en esa capa, asi que no se veia.
+    # Se marca como held con el nombre de la capa que activa en la base: para Fn + Media se ve que
+    # hay que mantener Num + Nav y Symbols a la vez.
+    for source in range(len(layout)):
+        for pos, (r, c) in enumerate(LAYOUT_ORDER):
+            target = layer_target(layout[source][r][c])
+            if target is None or target >= len(layout) or layout[target][r][c] != "KC_TRNS":
+                continue
+            base = layer_target(layout[0][r][c])
+            labels[target][pos] = {"t": layer_name(target if base is None else base, names), "type": "held"}
     layers = {}
     for index, name in enumerate(names):
         if name == "-":
             continue
-        layers[name] = [key_label(layout[index][r][c], os_name) for r, c in LAYOUT_ORDER]
+        layers[name] = labels[index]
     doc = {
         "layout": {"qmk_keyboard": "crkbd/rev4_1/standard", "layout_name": "LAYOUT_split_3x6_3_ex2"},
         "layers": layers,

@@ -52,8 +52,8 @@
    "Opt",
    "Space",
    "Enter",
-   "Hold L2",
-   "Hold L1"
+   "Hold Symbols",
+   "Hold Num+Nav"
   ],
   "Num + Nav": [
    {
@@ -118,9 +118,10 @@
    {
     "type": "trans"
    },
-   "Hold L3",
+   "Hold Fn+Media",
    {
-    "type": "trans"
+    "t": "Num+Nav",
+    "type": "held"
    }
   ],
   "Symbols": [
@@ -191,9 +192,10 @@
     "type": "trans"
    },
    {
-    "type": "trans"
+    "t": "Symbols",
+    "type": "held"
    },
-   "Hold L3"
+   "Hold Fn+Media"
   ],
   "Fn + Media": [
    "QK_BOOT",
@@ -249,10 +251,12 @@
     "type": "trans"
    },
    {
-    "type": "trans"
+    "t": "Symbols",
+    "type": "held"
    },
    {
-    "type": "trans"
+    "t": "Num+Nav",
+    "type": "held"
    }
   ]
  }
