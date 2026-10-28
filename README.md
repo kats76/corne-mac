@@ -87,7 +87,7 @@ Docker must be running before you build: open Docker Desktop first, or the scrip
 ./scripts/build.sh
 ```
 
-The first build downloads vial-qmk (a few hundred MB) and the QMK image, so it takes a few minutes and can stay silent for a while. Later builds reuse both.
+The first build downloads vial-qmk (a few hundred MB) and the QMK image, so it takes a few minutes; the script shows each step and the download progress. Later builds reuse both.
 
 The firmware ends up in `dist/crkbd_rev4_1_standard_mac_layers.uf2`. A `cannot create regular file '/qmk_userspace/...'` message near the end is harmless: the image tries to copy the file to a folder that this project does not use. CI builds it on every push and attaches it to each `v*` tag release. For another revision, run `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 

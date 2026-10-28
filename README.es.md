@@ -87,7 +87,7 @@ Docker tiene que estar en ejecución antes de compilar: abre primero Docker Desk
 ./scripts/build.sh
 ```
 
-La primera compilación descarga vial-qmk (unos cientos de MB) y la imagen de QMK, así que tarda unos minutos y puede pasar un rato sin mostrar nada. Las siguientes reutilizan las dos.
+La primera compilación descarga vial-qmk (unos cientos de MB) y la imagen de QMK, así que tarda unos minutos; el script muestra cada paso y el progreso de la descarga. Las siguientes reutilizan las dos.
 
 El firmware queda en `dist/crkbd_rev4_1_standard_mac_layers.uf2`. Si al final aparece `cannot create regular file '/qmk_userspace/...'`, no pasa nada: la imagen intenta copiar el archivo a una carpeta que este proyecto no usa. El CI lo compila en cada push y lo adjunta a la release de cada tag `v*`. Para otra revisión: `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
