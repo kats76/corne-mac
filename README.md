@@ -70,13 +70,25 @@ The firmware keeps foostan's Vial UID, so any `.vil` keeps loading. `SPLIT_LAYER
 
 You only need Docker. The QMK toolchain is never installed on your system: everything runs in the official `ghcr.io/qmk/qmk_cli` image with networking disabled. vial-qmk is pinned to a fixed commit, so everyone builds the same source. The resulting `.uf2` is not byte-for-byte identical across machines (the build embeds environment details), but it behaves the same.
 
+Docker must be running before you build: open Docker Desktop first, or the script stops with `Cannot connect to the Docker daemon`.
+
 ```bash
 ./scripts/build.sh
 ```
 
+The first build downloads vial-qmk (a few hundred MB) and the QMK image, so it takes a few minutes and can stay silent for a while. Later builds reuse both.
+
 The firmware ends up in `dist/crkbd_rev4_1_standard_mac_layers.uf2`. A `cannot create regular file '/qmk_userspace/...'` message near the end is harmless: the image tries to copy the file to a folder that this project does not use. CI builds it on every push and attaches it to each `v*` tag release. For another revision, run `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
-On Windows, run the scripts from WSL or Git Bash with Docker Desktop.
+### Building on Windows
+
+Use WSL 2 (for example Ubuntu) with Docker Desktop's WSL integration, or Docker Engine installed inside WSL. If you have Docker Desktop, you already have WSL 2.
+
+1. Open a WSL terminal and clone the repo inside your Linux home (`cd ~`), not under `/mnt/c/...`. Building from the Windows file system is much slower, because QMK reads thousands of files.
+2. Run `./scripts/build.sh` as above.
+3. Copy the `.uf2` to Windows from the File Explorer, at `\\wsl$\<distro>\home\<user>\...`, or run `explorer.exe dist`.
+
+Git Bash is not supported: it ships without `rsync` and rewrites the paths passed to Docker.
 
 ## Before you flash
 
