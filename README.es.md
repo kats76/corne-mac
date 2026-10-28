@@ -59,10 +59,21 @@ Todo el teclado cambia de color según la capa activa, así siempre sabes dónde
 
 | Capa | Color |
 | --- | --- |
-| 0 Base | Blanco tenue |
+| 0 Base | Blanco tenue (el color elegido en Vial) |
 | 1 Num + Nav | Azul |
 | 2 Símbolos | Verde |
 | 3 Fn + Media | Rojo |
+| 4 (sin usar) | Amarillo |
+| 5 (sin usar) | Violeta |
+
+El color corresponde al **número** de capa, no a su contenido. Si tu propio layout pone los símbolos en la capa 1, se verán en azul.
+
+### Cambiar los colores
+
+- **Capa base, sin compilar:** elige un color en la pestaña **Lighting** de Vial, o usa las teclas de tono y saturación de la capa Fn + Media. La base se mantiene a un tercio del brillo para que las demás capas resalten.
+- **Capas 1 a 5:** edita las líneas `LAYER_n_COLOR` en `keymap/mac_layers/config.h`, compila y flashea. Los nombres de colores disponibles están justo encima de esas líneas.
+
+Las teclas de brillo y la de encendido funcionan en todas las capas. Las teclas de efecto (modo) no tienen efecto visible, porque el color de la capa se pinta encima del efecto.
 
 El firmware conserva el UID de Vial de foostan, así que los `.vil` siguen cargando. `SPLIT_LAYER_STATE_ENABLE` envía la capa activa a la mitad secundaria para que las dos se pinten igual.
 
@@ -105,7 +116,7 @@ El Corne v4.1 no tiene botón de reset. Se usa bootmagic, que además borra la m
 4. Ejecuta `./scripts/draw.sh` para regenerar las imágenes de las capas.
 5. Abre un pull request si lo quieres compartir.
 
-Para cambiar los colores de las capas, edita `rgb_matrix_indicators_advanced_user` en `keymap/mac_layers/keymap.c` y vuelve a compilar.
+Para cambiar los colores de las capas, consulta [Cambiar los colores](#cambiar-los-colores).
 
 ## Glosario
 
