@@ -117,20 +117,28 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 #ifdef RGB_MATRIX_ENABLE
 // Todo el teclado de un solo color segun la capa, para saber en cual estoy sin mirar la pantalla.
 // Se pinta encima del efecto activo y respeta el brillo configurado en Vial.
+// Los colores de las capas 1 a 5 se eligen en config.h.
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     hsv_t hsv;
     switch (get_highest_layer(layer_state)) {
         case 1:
-            hsv = (hsv_t){HSV_BLUE};
+            hsv = (hsv_t){LAYER_1_COLOR};
             break;
         case 2:
-            hsv = (hsv_t){HSV_GREEN};
+            hsv = (hsv_t){LAYER_2_COLOR};
             break;
         case 3:
-            hsv = (hsv_t){HSV_RED};
+            hsv = (hsv_t){LAYER_3_COLOR};
+            break;
+        case 4:
+            hsv = (hsv_t){LAYER_4_COLOR};
+            break;
+        case 5:
+            hsv = (hsv_t){LAYER_5_COLOR};
             break;
         default:
-            hsv = (hsv_t){HSV_WHITE};
+            // La base sigue el color de Vial, asi se cambia sin recompilar
+            hsv = rgb_matrix_get_hsv();
             break;
     }
     hsv.v = rgb_matrix_get_val();
