@@ -81,13 +81,25 @@ El firmware conserva el UID de Vial de foostan, así que los `.vil` siguen carga
 
 Solo necesitas Docker. El toolchain de QMK nunca se instala en tu sistema: todo corre en la imagen oficial `ghcr.io/qmk/qmk_cli`, sin red. vial-qmk está fijado a un commit concreto, así todos compilan el mismo código fuente. El `.uf2` resultante no es idéntico byte a byte entre máquinas (la compilación incluye datos del entorno), pero funciona igual.
 
+Docker tiene que estar en ejecución antes de compilar: abre primero Docker Desktop, o el script se detiene con `Cannot connect to the Docker daemon`.
+
 ```bash
 ./scripts/build.sh
 ```
 
+La primera compilación descarga vial-qmk (unos cientos de MB) y la imagen de QMK, así que tarda unos minutos y puede pasar un rato sin mostrar nada. Las siguientes reutilizan las dos.
+
 El firmware queda en `dist/crkbd_rev4_1_standard_mac_layers.uf2`. Si al final aparece `cannot create regular file '/qmk_userspace/...'`, no pasa nada: la imagen intenta copiar el archivo a una carpeta que este proyecto no usa. El CI lo compila en cada push y lo adjunta a la release de cada tag `v*`. Para otra revisión: `KEYBOARD=crkbd/rev4_0/standard ./scripts/build.sh`.
 
-En Windows, ejecuta los scripts desde WSL o Git Bash, con Docker Desktop.
+### Compilar en Windows
+
+Usa WSL 2 (por ejemplo, Ubuntu) con la integración de Docker Desktop para WSL, o Docker Engine instalado dentro de WSL. Si tienes Docker Desktop, ya tienes WSL 2.
+
+1. Abre una terminal de WSL y clona el repo dentro de tu carpeta de Linux (`cd ~`), no en `/mnt/c/...`. Compilar desde el sistema de archivos de Windows es mucho más lento, porque QMK lee miles de archivos.
+2. Ejecuta `./scripts/build.sh` como se indica arriba.
+3. Copia el `.uf2` a Windows desde el Explorador de archivos, en `\\wsl$\<distro>\home\<usuario>\...`, o ejecuta `explorer.exe dist`.
+
+Git Bash no está soportado: no trae `rsync` y reescribe las rutas que se pasan a Docker.
 
 ## Antes de flashear
 
